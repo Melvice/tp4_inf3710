@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS kitRepas.PlanRepas (
 	fréquence			  INTEGER		        NOT NULL,
 	nbrpersonnes 		INTEGER		      	NOT NULL,
 	nbrcalories		  INTEGER		      	NOT NULL,
-	prix			      NUMERIC(6,3)			NOT NULL,
+	prix			      NUMERIC(6,2)			NOT NULL,
 	PRIMARY KEY (numeroplan)
 );
