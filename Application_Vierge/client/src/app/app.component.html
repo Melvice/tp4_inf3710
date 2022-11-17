@@ -1,0 +1,27 @@
+<div>
+  <nav class="navbar navbar-dark bg-dark main-nav">
+    <a class="navbar-brand title" href="/" matTooltip="Retournez à l'accueil">INF3710 - TP4</a>
+    <div class="navbar-expand mr-auto">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link active" routerLink="/planRepas">Plans repas</a>
+        <a class="nav-item nav-link active" routerLink="/ROUTEUR_À_IMPLÉMENTER">Modifier un plan</a>
+        <a class="nav-item nav-link active" routerLink="/ROUTEUR_À_IMPLÉMENTER">Ajouter un plan</a>
+        <a class="nav-item nav-link active" routerLink="/ROUTEUR_À_IMPLÉMENTER">Supprimer un plan</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="home" *ngIf="route == ''">
+    <div class="first">
+      Bienvenue
+    </div>
+    <div class="second">
+      <h1>
+         Au service de livraison de kit repas 
+      </h1>
+    </div>
+    
+    <button mat-raised-button color="primary" class="btn btn-animate" routerLink="/planRepas">Parcourir nos plans de repas<mat-icon>arrow_right</mat-icon></button>
+  </div>
+  <router-outlet></router-outlet>
+</div>
