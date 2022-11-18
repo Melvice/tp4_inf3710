@@ -10,6 +10,7 @@ import { AppMaterialModule } from './modules/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PlanRepasComponent } from './planRepas/plan-repas.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,7 +24,7 @@ import { PlanRepasComponent } from './planRepas/plan-repas.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    AppMaterialModule
+    AppMaterialModule,
   ],
   providers: [CommunicationService],
   entryComponents: [],
