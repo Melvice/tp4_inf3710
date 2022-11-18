@@ -18,31 +18,24 @@ export class DatabaseController {
 
    // ======= Plan Repas ROUTES =======
 
-   router.get("/planrepas", (req: Request, res: Response, _: NextFunction) => {
-    let numéroplan = parseInt(req.params.numéroplan) ? parseInt(req.params.numéroplan) : 0;
-    let catégorie = req.params.catégorie ? req.params.catégorie : "";
-    let fréquence = parseInt(req.params.fréquence) ? parseInt(req.params.fréquence) : 0;
-    let nbrpersonnes = parseInt(req.params.nbrpersonnes) ? parseInt(req.params.nbrpersonnes) : 0;
-    let nbrcalories = parseInt(req.params.nbrcalories) ? parseInt(req.params.nbrcalories) : 0;
-    let prix = parseFloat(req.params.prix) ? parseInt(req.params.prix) : -1;
-
-    this.databaseService
-      .filterPlanrepas(numéroplan,catégorie,fréquence,nbrpersonnes,nbrcalories,prix)
-      .then((result: pg.QueryResult) => {
-        const planRepas: PlanRepas[] = result.rows.map((planRepas: PlanRepas) => ({
-            numéroplan:   numéroplan,
-            catégorie:    catégorie,
-            fréquence:    fréquence,
-            nbrpersonnes: nbrpersonnes,
-            nbrcalories:  nbrcalories,
-            prix:         prix
-        }));
-        res.json(planRepas);
-      })
-      .catch((e: Error) => {
-        console.error(e.stack);
-      });
-  });
+  router.get("/planrepas", (req: Request, res: Response, _: NextFunction) => {
+        this.databaseService
+        .getAllPlans()
+        .then((result: pg.QueryResult) => {
+          const planRepas: PlanRepas[] = result.rows.map((plan: PlanRepas) => ({
+            numéroplan: plan.numéroplan,
+            catégorie: plan.catégorie,
+            fréquence: plan.fréquence,
+            nbrpersonnes: plan.nbrpersonnes,
+            nbrcalories: plan.nbrcalories,
+            prix: plan.prix,
+          } as PlanRepas));
+          res.json(planRepas);
+        })
+        .catch((e: Error) => {
+          console.error(e.stack);
+        });
+    });
 
   // ==== get plan repas with numeroPlan
 

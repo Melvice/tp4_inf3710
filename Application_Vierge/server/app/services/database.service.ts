@@ -16,15 +16,16 @@ export class DatabaseService {
 
   public pool: pg.Pool = new pg.Pool(this.connectionConfig);
 
-   // ======= DEBUG =======
-   public async getAllFromTable(tableName: string): Promise<pg.QueryResult> {
+  //===========PlanRepas==========
+
+  public async getAllPlans(): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT * FROM kitRepas.${tableName};`);
+    const res = await client.query(`SELECT * FROM kitRepas.planRepas;`);
     client.release();
     return res;
   }
 
-  //===========PlanRepas==========
+
   public async createPlanRepas(PlanRepas:PlanRepas): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
 
@@ -56,7 +57,7 @@ export class DatabaseService {
   }
 
   // get plan repas that matches certain caracteristics
-  public async filterPlanrepas(
+ /* public async filterPlanrepas(
     numéroplan:   number,
     catégorie:    string,
     fréquence:    number,
@@ -83,7 +84,7 @@ export class DatabaseService {
     client.release();
     return res;
   }
-
+*/
   // get planRepas categorie and numbers so so that the user can only select an existing hotel
   public async getPlanRepasByNos(numeroPlan:number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
@@ -127,7 +128,6 @@ export class DatabaseService {
 
     const client = await this.pool.connect();
     const query = `DELETE FROM kitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
- 
     const res = await client.query(query);
     client.release();
     return res;

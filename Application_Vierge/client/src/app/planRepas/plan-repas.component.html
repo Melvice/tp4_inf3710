@@ -11,11 +11,17 @@
       <th class="contentCell">Nombre de personnes</th>
       <th class="contentCell">Nombre de calories</th>
       <th class="contentCell">Prix</th>
-      <!--<th class="actionCell">ACTION</th>-->
+      <th class="actionCell">ACTION</th>
     </thead>
     <tbody>
-      <tr *ngFor="let hotel of planRepas; let i = index">
-        <td class="contentCell">{{ hotel.hotelnb }}</td>
+      <tr *ngFor="let plan of planRepas; let i = index">
+        <td class="contentCell">{{ plan.numéroplan }}</td>
+        <td class="contentCell">{{ plan.catégorie }}</td>
+        <td class="contentCell">{{ plan.fréquence }}</td>
+        <td class="contentCell">{{ plan.nbrpersonnes }}</td>
+        <td class="contentCell">{{ plan.nbrcalories }}</td>
+        <td class="contentCell">{{ plan.prix }}</td>
+        
         
         <td class="actionCell">
           <button type="button" class="submitbtn" (click)="updateHotel(i)"><i class="fa fa-edit"></i></button>

@@ -24,320 +24,120 @@ let DatabaseService = class DatabaseService {
         this.connectionConfig = {
             user: "postgres",
             database: "TP4",
-            password: "root",
+            password: "INF3710",
             port: 5432,
             host: "127.0.0.1",
             keepAlive: true
         };
         this.pool = new pg.Pool(this.connectionConfig);
     }
-    // ======= JARDINS =======
-    getAllJardins() {
+    //===========PlanRepas==========
+    getAllPlans() {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Jardin;`;
-            const res = yield client.query(queryText);
+            const res = yield client.query(`SELECT * FROM kitRepas.planRepas;`);
             client.release();
             return res;
         });
     }
-    getJardin(id) {
+    createPlanRepas(PlanRepas) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Jardin WHERE ID = ${id.toString()};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    // ======= PARCELLES =======
-    getAllParcelles() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Parcelle;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getAllParcellesOfJardin(IDJardin) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Parcelle WHERE IDJardin = ${IDJardin.toString()};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    // ======= RANGS =======
-    getAllRangs() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Rang;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getAllRangsOfParcelle(coordsParcelle) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Rang WHERE coordonneesparcelle = ${coordsParcelle};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    // ======= VARIETES =======
-    getAllVarietesInRangs() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.VarieteContenuDansUnRang;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getAllVarietesOfSpecificRang(coordonneesRang) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.VarieteContenuDansUnRang WHERE coordonneesRang = ${coordonneesRang};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getAllVarietes() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Variete;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getSpecificVariete(varieteName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Variete WHERE nom = ${varieteName};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    addVariete(variete) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const sep = "##//##";
-            const descriptions = variete.description.split(sep);
-            if (!variete.anneemiseenmarche.toString().length || !variete.commentairegeneral.length || descriptions.length !== 3 || !variete.nom.length || !variete.periodemiseenplace.length || !variete.perioderecolte.length) {
-                throw new Error("Impossible d'ajouter la variété désirée.");
+            if (!PlanRepas.numéroplan ||
+                !PlanRepas.catégorie ||
+                !PlanRepas.fréquence ||
+                !PlanRepas.nbrpersonnes ||
+                !PlanRepas.nbrcalories ||
+                !PlanRepas.prix) {
+                throw new Error("Invalid create planRepas values");
             }
             const values = [
-                variete.nom,
-                variete.anneemiseenmarche,
-                '"' + descriptions[0] + '"',
-                '"' + descriptions[1] + '"',
-                '"' + descriptions[2] + '"',
-                variete.periodemiseenplace,
-                variete.perioderecolte,
-                variete.commentairegeneral,
+                PlanRepas.numéroplan,
+                PlanRepas.catégorie,
+                PlanRepas.fréquence,
+                PlanRepas.nbrpersonnes,
+                PlanRepas.nbrcalories,
+                PlanRepas.prix
             ];
-            const queryText = `INSERT INTO jardinCommMR.Variete (nom, anneeMiseEnMarche, description, periodeMiseEnPlace, periodeRecolte, commentaireGeneral) VALUES($1, $2, ROW($3, $4, $5), $6, $7, $8);`;
+            const queryText = `INSERT INTO KitRepas.PlanRepas VALUES($1, $2, $3, $4, $5, $6);`;
             const res = yield client.query(queryText, values);
             client.release();
             return res;
         });
     }
-    updateVariete(variete) {
+    // get plan repas that matches certain caracteristics
+    /* public async filterPlanrepas(
+       numéroplan:   number,
+       catégorie:    string,
+       fréquence:    number,
+       nbrpersonnes: number,
+       nbrcalories:  number,
+       prix:         number
+     ): Promise<pg.QueryResult> {
+       const client = await this.pool.connect();
+   
+       const searchTerms: (string|number)[] = [];
+       if (numéroplan >= 0) searchTerms.push(`numéroPlan = '${numéroplan}'`);
+       if (catégorie.length > 0) searchTerms.push(`catégorie = '${catégorie}'`);
+       if (fréquence >= 0) searchTerms.push(`fréquence = '${fréquence}'`);
+       if (nbrpersonnes >= 0) searchTerms.push(`nbrpersonnes = '${nbrpersonnes}'`);
+       if (nbrcalories >= 0) searchTerms.push(`nbrcalories = '${nbrcalories}'`);
+       if (prix >= 0) searchTerms.push(`prix = '${prix}'`);
+   
+       let queryText = "SELECT * FROM KitRepas.PlanRepas";
+       if (searchTerms.length > 0)
+         queryText += " WHERE " + searchTerms.join(" AND ");
+       queryText += ";";
+   
+       const res = await client.query(queryText);
+       client.release();
+       return res;
+     }
+   */
+    // get planRepas categorie and numbers so so that the user can only select an existing hotel
+    getPlanRepasByNos(numeroPlan) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const sep = "##//##";
-            const descriptions = variete.description.split(sep);
-            if (!variete.oldvarietename || !variete.anneemiseenmarche.toString().length || !variete.commentairegeneral.length || descriptions.length !== 3 || !variete.nom.length || !variete.periodemiseenplace.length || !variete.perioderecolte.length) {
-                throw new Error("Impossible de modifier la variété désirée.");
+            const res = yield client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numéroplan ='${numeroPlan} '`);
+            client.release();
+            return res;
+        });
+    }
+    // modify plan repas
+    updatePlanRepas(PlanRepas) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const client = yield this.pool.connect();
+            let toUpdateValues = [];
+            if (PlanRepas.numéroplan >= 0)
+                toUpdateValues.push(`numéroPlan = '${PlanRepas.numéroplan}'`);
+            if (PlanRepas.catégorie.length > 0)
+                toUpdateValues.push(`catégorie = '${PlanRepas.catégorie}'`);
+            if (PlanRepas.fréquence >= 0)
+                toUpdateValues.push(`fréquence = '${PlanRepas.fréquence}'`);
+            if (PlanRepas.nbrpersonnes >= 0)
+                toUpdateValues.push(`nbrpersonnes = '${PlanRepas.nbrpersonnes}'`);
+            if (PlanRepas.nbrcalories >= 0)
+                toUpdateValues.push(`nbrcalories = '${PlanRepas.nbrcalories}'`);
+            if (PlanRepas.prix >= 0)
+                toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
+            if (!PlanRepas.numéroplan ||
+                PlanRepas.numéroplan == null ||
+                toUpdateValues.length === 0) {
+                throw new Error("Invalid PlanRepas update query");
             }
-            const values = [
-                variete.nom,
-                variete.anneemiseenmarche,
-                '"' + descriptions[0] + '"',
-                '"' + descriptions[1] + '"',
-                '"' + descriptions[2] + '"',
-                variete.periodemiseenplace,
-                variete.perioderecolte,
-                variete.commentairegeneral,
-                variete.oldvarietename
-            ];
-            const queryText = `UPDATE jardinCommMR.Variete SET nom = $1, anneeMiseEnMarche = $2, description = ROW($3, $4, $5), periodeMiseEnPlace = $6, periodeRecolte = $7, commentaireGeneral = $8 WHERE nom = $9;`;
-            const res = yield client.query(queryText, values);
+            const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(", ")} WHERE numéroplan = '${PlanRepas.numéroplan}';`;
+            const res = yield client.query(query);
             client.release();
             return res;
         });
     }
-    deleteVariete(nomVariete) {
+    deletePlanRepas(numéroPlan) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (numéroPlan === null)
+                throw new Error("Invalid delete query");
             const client = yield this.pool.connect();
-            if (!nomVariete) {
-                throw new Error("Impossible de supprimer la variété désirée.");
-            }
-            const values = [
-                nomVariete
-            ];
-            const queryText = `DELETE FROM jardinCommMR.Variete WHERE nom = $1;`;
-            const res = yield client.query(queryText, values);
-            client.release();
-            return res;
-        });
-    }
-    // ======= PLANTES =======
-    getAllPlantes() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Plante;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getSpecificPlante(nomLatin) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Plante WHERE nomLatin = ${nomLatin};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    // ======= SEMENCIER =======
-    getAllSemencier() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Semencier;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getSpecificSemencier(nom) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Semencier WHERE nom = ${nom};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    // ======= ADAPTATIONTYPESOLVARIETE =======
-    getAllAdaptationTypeSolVariete() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.AdaptationTypeSolVariete;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getSpecificAdaptationTypeSolVariete(nomVariete) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.AdaptationTypeSolVariete WHERE nomVariete = ${nomVariete};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    addAdaptation(adaptation) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            if (!adaptation.nomvariete || !adaptation.adaptationtypesol) {
-                throw new Error("Impossible d'ajouter l'adaptation désirée.");
-            }
-            const values = [
-                adaptation.nomvariete,
-                adaptation.adaptationtypesol
-            ];
-            const queryText = `INSERT INTO jardinCommMR.AdaptationTypeSolVariete (nomVariete, adaptationTypeSol) VALUES($1, $2);`;
-            const res = yield client.query(queryText, values);
-            client.release();
-            return res;
-        });
-    }
-    updateAdaptation(adaptation) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            if (!adaptation.adaptationtypesol) {
-                return null;
-            }
-            if (!adaptation.nomvariete || !adaptation.oldnomvariete || adaptation.oldadaptationtypesol === undefined) {
-                throw new Error("Impossible de modifier l'adaptation désirée.");
-            }
-            const values = [
-                adaptation.nomvariete,
-                adaptation.adaptationtypesol,
-                adaptation.oldnomvariete,
-                adaptation.oldadaptationtypesol
-            ];
-            const queryText = `UPDATE jardinCommMR.AdaptationTypeSolVariete SET nomVariete = $1, adaptationTypeSol = $2 WHERE nomVariete = $3 AND adaptationTypeSol = $4;`;
-            const res = yield client.query(queryText, values);
-            client.release();
-            return res;
-        });
-    }
-    // ======= PRODUCTION =======
-    getAllProduction() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Production;`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    getSpecificProduction(nomVariete) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            const queryText = `SELECT * FROM jardinCommMR.Production WHERE nomVariete = ${nomVariete};`;
-            const res = yield client.query(queryText);
-            client.release();
-            return res;
-        });
-    }
-    addProduction(production) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            if (!production.nomsemencier || !production.nomvariete) {
-                throw new Error("Impossible d'ajouter la production désirée.");
-            }
-            const values = [
-                production.nomvariete,
-                production.nomsemencier,
-                production.produitbio
-            ];
-            const queryText = `INSERT INTO jardinCommMR.Production (nomVariete, nomSemencier, produitBio) VALUES($1, $2, $3);`;
-            const res = yield client.query(queryText, values);
-            client.release();
-            return res;
-        });
-    }
-    updateProduction(production) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const client = yield this.pool.connect();
-            console.table(production);
-            if (!production.nomsemencier) {
-                return null;
-            }
-            if (!production.nomvariete || production.oldnomsemencier === undefined || !production.oldnomvariete) {
-                throw new Error("Impossible de modifier la production désirée.");
-            }
-            const values = [
-                production.nomvariete,
-                production.nomsemencier,
-                production.produitbio,
-                production.oldnomvariete,
-                production.oldnomsemencier,
-            ];
-            const queryText = `UPDATE jardinCommMR.Production SET nomVariete = $1, nomSemencier = $2, produitBio = $3 WHERE nomVariete = $4 AND nomSemencier = $5;`;
-            const res = yield client.query(queryText, values);
+            const query = `DELETE FROM kitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
+            const res = yield client.query(query);
             client.release();
             return res;
         });

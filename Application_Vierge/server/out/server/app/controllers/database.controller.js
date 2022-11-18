@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DatabaseController = void 0;
 const express_1 = require("express");
 const inversify_1 = require("inversify");
-const database_service_1 = require("../services/database.service");
 const types_1 = require("../types");
+const database_service_1 = require("../services/database.service");
 let DatabaseController = class DatabaseController {
     constructor(
     // @ts-ignore -- À ENLEVER LORSQUE L'IMPLÉMENTATION EST TERMINÉE
@@ -25,6 +25,96 @@ let DatabaseController = class DatabaseController {
     }
     get router() {
         const router = (0, express_1.Router)();
+        // ======= Plan Repas ROUTES =======
+        router.get("/planrepas", (req, res, _) => {
+            this.databaseService
+                .getAllPlans()
+                .then((result) => {
+                const planRepas = result.rows.map((plan) => ({
+                    numéroplan: plan.numéroplan,
+                    catégorie: plan.catégorie,
+                    fréquence: plan.fréquence,
+                    nbrpersonnes: plan.nbrpersonnes,
+                    nbrcalories: plan.nbrcalories,
+                    prix: plan.prix,
+                }));
+                res.json(planRepas);
+            })
+                .catch((e) => {
+                console.error(e.stack);
+            });
+        });
+        // ==== get plan repas with numeroPlan
+        router.get("/planrepas/numeroPlan", (req, res, _) => {
+            let numeroPlan = parseInt(req.params.numéroplan) ? parseInt(req.params.numéroplan) : 0;
+            this.databaseService
+                .getPlanRepasByNos(numeroPlan)
+                .then((result) => {
+                const planRepasNames = result.rows.map((planRepas) => ({
+                    numéroplan: planRepas.numéroplan,
+                    catégorie: planRepas.catégorie,
+                    fréquence: planRepas.fréquence,
+                    nbrpersonnes: planRepas.nbrpersonnes,
+                    nbrcalories: planRepas.nbrcalories,
+                    prix: planRepas.prix
+                }));
+                res.json(planRepasNames);
+            })
+                .catch((e) => {
+                console.error(e.stack);
+            });
+        });
+        // ====== ADD PlanRepas ==============
+        router.post("/planrepas/ajouter", (req, res, _) => {
+            const planRepas = {
+                numéroplan: req.body.numéroplan,
+                catégorie: req.body.catégorie,
+                fréquence: req.body.fréquence,
+                nbrpersonnes: req.body.nbrpersonnes,
+                nbrcalories: req.body.nbrcalories,
+                prix: req.body.prix
+            };
+            this.databaseService
+                .createPlanRepas(planRepas)
+                .then((result) => {
+                res.json(result.rowCount);
+            })
+                .catch((e) => {
+                console.error(e.stack);
+                res.json(-1);
+            });
+        });
+        //====== delete a plan from the database
+        router.delete("/planrepas/delete/:numéroplan", (req, res, _) => {
+            const numeroPlan = req.params.numéroplan;
+            this.databaseService
+                .deletePlanRepas(numeroPlan)
+                .then((result) => {
+                res.json(result.rowCount);
+            })
+                .catch((e) => {
+                console.error(e.stack);
+            });
+        });
+        //=== update planRepas =======
+        router.put("/planrepas/update", (req, res, _) => {
+            const planRepas = {
+                numéroplan: req.body.numéroplan ? req.body.numéroplan : null,
+                catégorie: req.body.catégorie ? req.body.catégorie : "",
+                fréquence: req.body.fréquence ? req.body.fréquence : null,
+                nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes : null,
+                nbrcalories: req.body.nbrcalories ? req.body.nbrcalories : null,
+                prix: req.body.prix ? req.body.prix : null
+            };
+            this.databaseService
+                .updatePlanRepas(planRepas)
+                .then((result) => {
+                res.json(result.rowCount);
+            })
+                .catch((e) => {
+                console.error(e.stack);
+            });
+        });
         return router;
     }
 };
