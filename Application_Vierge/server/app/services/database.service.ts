@@ -126,8 +126,8 @@ export class DatabaseService {
     if (numéroPlan === null) throw new Error("Invalid delete query");
 
     const client = await this.pool.connect();
-    const query = `DELETE FROM KitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
-
+    const query = `DELETE FROM kitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
+ 
     const res = await client.query(query);
     client.release();
     return res;

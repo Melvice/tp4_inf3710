@@ -23,10 +23,10 @@ export class CommunicationService {
   }
 
   //======== Plan Repas http request =================
-  public getPlanRepas(): Observable<PlanRepas[]> {
+  public getAllPlanRepas(): Observable<PlanRepas[]> {
     return this.http
       .get<PlanRepas[]>(this.BASE_URL + "/planrepas")
-      .pipe(catchError(this.handleError<PlanRepas[]>("getPlanRepas")));
+      .pipe(catchError(this.handleError<PlanRepas[]>("getAllPlanRepas")));
   }
 
   public AddPlanRepas(planRepas: PlanRepas): Observable<number> {
@@ -41,9 +41,9 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<number>("updatePlanRepas")));
   }
 
-  public deletePlanRepas(numeroPlan: string): Observable<number> {
+  public deletePlanRepas(numeroPlan: number): Observable<number> {
     return this.http
-      .post<number>(this.BASE_URL + "/planrepas/delete/" + numeroPlan, {})
+      .post<number>(this.BASE_URL + `/planrepas/delete/${numeroPlan}`, {})
       .pipe(catchError(this.handleError<number>("deletePlanRepas")));
   }
 
