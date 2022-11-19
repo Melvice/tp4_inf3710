@@ -22,15 +22,16 @@ export class DatabaseController {
         this.databaseService
         .getAllPlans()
         .then((result: pg.QueryResult) => {
-          const planRepas: PlanRepas[] = result.rows.map((plan: PlanRepas) => ({
-            numéroplan: plan.numéroplan,
-            catégorie: plan.catégorie,
-            fréquence: plan.fréquence,
+          const plans: PlanRepas[] = result.rows.filter((plan: PlanRepas) => ({
+            numeroplan: plan.numeroplan,
+            categorie: plan.categorie,
+            frequence: plan.frequence,
             nbrpersonnes: plan.nbrpersonnes,
             nbrcalories: plan.nbrcalories,
             prix: plan.prix,
-          } as PlanRepas));
-          res.json(planRepas);
+          }));
+          //console.log(plans);
+          res.json(plans);
         })
         .catch((e: Error) => {
           console.error(e.stack);
@@ -42,14 +43,14 @@ export class DatabaseController {
   router.get(
     "/planrepas/numeroPlan",
     (req: Request, res: Response, _: NextFunction) => {
-      let numeroPlan = parseInt(req.params.numéroplan) ? parseInt(req.params.numéroplan) : 0;
+      let numeroPlan = parseInt(req.params.numeroplan) ? parseInt(req.params.numeroplan) : 0;
       this.databaseService
         .getPlanRepasByNos(numeroPlan)
         .then((result: pg.QueryResult) => {
           const planRepasNames = result.rows.map((planRepas: PlanRepas) => ({
-            numéroplan:   planRepas.numéroplan,
-            catégorie:    planRepas.catégorie,
-            fréquence:    planRepas.fréquence,
+            numeroplan:   planRepas.numeroplan,
+            categorie:    planRepas.categorie,
+            frequence:    planRepas.frequence,
             nbrpersonnes: planRepas.nbrpersonnes,
             nbrcalories:  planRepas.nbrcalories,
             prix:         planRepas.prix
@@ -70,9 +71,9 @@ export class DatabaseController {
     "/planrepas/ajouter",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
-        numéroplan:   req.body.numéroplan,
-        catégorie:    req.body.catégorie,
-        fréquence:    req.body.fréquence,
+        numeroplan:   req.body.numeroplan,
+        categorie:    req.body.categorie,
+        frequence:    req.body.frequence,
         nbrpersonnes: req.body.nbrpersonnes,
         nbrcalories:  req.body.nbrcalories,
         prix:         req.body.prix
@@ -93,9 +94,9 @@ export class DatabaseController {
  //====== delete a plan from the database
 
   router.delete(
-    "/planrepas/delete/:numéroplan",
+    "/planrepas/delete/:numeroplan",
     (req: Request, res: Response, _: NextFunction) => {
-      const numeroPlan: string = req.params.numéroplan;
+      const numeroPlan: number = parseInt(req.params.numeroplan);
       this.databaseService
         .deletePlanRepas(numeroPlan)
         .then((result: pg.QueryResult) => {
@@ -113,9 +114,9 @@ export class DatabaseController {
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
        
-        numéroplan:   req.body.numéroplan ? req.body.numéroplan : null,
-        catégorie:    req.body.catégorie ? req.body.catégorie: "",
-        fréquence:    req.body.fréquence ? req.body.fréquence: null,
+        numeroplan:   req.body.numeroplan ? req.body.numeroplan : null,
+        categorie:    req.body.categorie ? req.body.categorie: "",
+        frequence:    req.body.frequence ? req.body.frequence: null,
         nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes: null,
         nbrcalories:  req.body.nbrcalories ? req.body.nbrcalories: null,
         prix:         req.body.prix ? req.body.prix : null

@@ -20,7 +20,7 @@ export class DatabaseService {
 
   public async getAllPlans(): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT * FROM kitRepas.planRepas;`);
+    const res = await client.query(`SELECT * FROM kitRepas.PlanRepas;`);
     client.release();
     return res;
   }
@@ -30,9 +30,9 @@ export class DatabaseService {
     const client = await this.pool.connect();
 
     if (
-      !PlanRepas.numéroplan|| 
-      !PlanRepas.catégorie || 
-      !PlanRepas.fréquence|| 
+      !PlanRepas.numeroplan|| 
+      !PlanRepas.categorie || 
+      !PlanRepas.frequence|| 
       !PlanRepas.nbrpersonnes|| 
       !PlanRepas.nbrcalories|| 
       !PlanRepas.prix)
@@ -42,9 +42,9 @@ export class DatabaseService {
 
     const values: (string | number)[] = 
     [
-      PlanRepas.numéroplan, 
-      PlanRepas.catégorie, 
-      PlanRepas.fréquence, 
+      PlanRepas.numeroplan, 
+      PlanRepas.categorie, 
+      PlanRepas.frequence, 
       PlanRepas.nbrpersonnes, 
       PlanRepas.nbrcalories, 
       PlanRepas.prix
@@ -88,7 +88,7 @@ export class DatabaseService {
   // get planRepas categorie and numbers so so that the user can only select an existing hotel
   public async getPlanRepasByNos(numeroPlan:number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numéroplan ='${numeroPlan} '`);
+    const res = await client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
     client.release();
     return res;
   }
@@ -99,16 +99,16 @@ export class DatabaseService {
 
     let toUpdateValues: any[] = [];
 
-    if (PlanRepas.numéroplan >= 0) toUpdateValues.push(`numéroPlan = '${PlanRepas.numéroplan}'`);
-    if (PlanRepas.catégorie.length > 0) toUpdateValues.push(`catégorie = '${PlanRepas.catégorie}'`);
-    if (PlanRepas.fréquence >= 0) toUpdateValues.push(`fréquence = '${PlanRepas.fréquence}'`);
-    if (PlanRepas.nbrpersonnes >= 0) toUpdateValues.push(`nbrpersonnes = '${PlanRepas.nbrpersonnes}'`);
-    if (PlanRepas.nbrcalories >= 0) toUpdateValues.push(`nbrcalories = '${PlanRepas.nbrcalories}'`);
+    if (PlanRepas.numeroplan >= 0) toUpdateValues.push(`numeroPlan = '${PlanRepas.numeroplan}'`);
+    if (PlanRepas.categorie.length > 0) toUpdateValues.push(`categorie = '${PlanRepas.categorie}'`);
+    if (PlanRepas.frequence >= 0) toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
+    if (PlanRepas.nbrpersonnes >= 0) toUpdateValues.push(`nbrPersonnes = '${PlanRepas.nbrpersonnes}'`);
+    if (PlanRepas.nbrcalories >= 0) toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
     if (PlanRepas.prix >= 0) toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
 
     if (
-      !PlanRepas.numéroplan ||
-      PlanRepas.numéroplan == null||
+      !PlanRepas.numeroplan ||
+      PlanRepas.numeroplan == null||
       toUpdateValues.length === 0
     )
     {
@@ -117,17 +117,17 @@ export class DatabaseService {
 
     const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(
       ", "
-    )} WHERE numéroplan = '${PlanRepas.numéroplan}';`;
+    )} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
     const res = await client.query(query);
     client.release();
     return res;
   }
 
-  public async deletePlanRepas(numéroPlan: string): Promise<pg.QueryResult> {
-    if (numéroPlan === null) throw new Error("Invalid delete query");
+  public async deletePlanRepas(numeroPlan: number): Promise<pg.QueryResult> {
+    if (numeroPlan === null) throw new Error("Invalid delete query");
 
     const client = await this.pool.connect();
-    const query = `DELETE FROM kitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
+    const query = `DELETE FROM kitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
     const res = await client.query(query);
     client.release();
     return res;

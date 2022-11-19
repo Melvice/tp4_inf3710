@@ -1,3 +1,9 @@
+
+
+
+
+
+
 <div class="container">
 
   <h1>Nos plans repas</h1>
@@ -5,40 +11,29 @@
 
   <table id="ht" align="center" border="1" width="1000" class="table-striped table-hover">
     <thead class="header">
-      <th class="contentCell">Numéro du plan</th>
-      <th class="contentCell">Catégorie</th>
-      <th class="contentCell">Fréquence</th>
-      <th class="contentCell">Nombre de personnes</th>
-      <th class="contentCell">Nombre de calories</th>
-      <th class="contentCell">Prix</th>
+      <th class="headerCell">Numéro du plan</th>
+      <th class="headerCell">Catégorie</th>
+      <th class="headerCell">Fréquence</th>
+      <th class="headerCell">Nombre de personnes</th>
+      <th class="headerCell">Nombre de calories</th>
+      <th class="headerCell">Prix</th>
       <th class="actionCell">ACTION</th>
     </thead>
-    <tbody>
-      <tr *ngFor="let plan of planRepas; let i = index">
-        <td class="contentCell">{{ plan.numéroplan }}</td>
-        <td class="contentCell">{{ plan.catégorie }}</td>
-        <td class="contentCell">{{ plan.fréquence }}</td>
+    <tbody class = "containerBody">
+      <tr class="contentInfo" *ngFor="let plan of planRepas; let i = index">
+        <td class="contentCell">{{ plan.numeroplan }}</td>
+        <td class="contentCell">{{ plan.categorie }}</td>
+        <td class="contentCell">{{ plan.frequence }}</td>
         <td class="contentCell">{{ plan.nbrpersonnes }}</td>
         <td class="contentCell">{{ plan.nbrcalories }}</td>
         <td class="contentCell">{{ plan.prix }}</td>
-        
-        
-        <td class="actionCell">
+        <td class="contentCell">
           <button type="button" class="submitbtn" (click)="updateHotel(i)"><i class="fa fa-edit"></i></button>
           <button type="button" class="deletebtn" (click)="deleteHotel(hotel.hotelnb)"><i class="fa fa-trash-o"></i></button>
         </td>
       </tr>
-
-      <tr class="blank_row">
-        <td class="contentCell" contenteditable="true" placeholder="New Number" #newHotelNb></td>
-        <td class="contentCell" contenteditable="true" placeholder="New Name" #newHotelName></td>
-        <td class="contentCell" contenteditable="true" placeholder="New City" #newHotelCity></td>
-        <td class="contentCell"></td>
-    </tr>
-
     </tbody>
   </table>
-
-  <button type="button" class="btn" >+</button>
+  <button type="button" class="button-add" >+</button>
 
 </div>

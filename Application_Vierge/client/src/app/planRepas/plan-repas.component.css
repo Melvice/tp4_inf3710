@@ -39,9 +39,65 @@ th {
   color: #9A75F0;
 }
 .container{
+
   border: 1px solid rgba(251, 246, 246, 0.222);
   margin-top: 80px;
   padding: 30px;
   border-radius: 20px;
   box-shadow:rgba(0, 0, 0, 0.3) 0px 19px  38px, rgba(0, 0, 0, 0.22) 0px 15px  12px;
+}
+
+.contentCell{
+  background-color: rgba(235, 235, 184, 0.727);
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+.contentInfo {
+  margin: 1rem;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  transition: all 0.7s ;
+  -webkit-transition: all 0.7s ;
+  -moz-transition: all 0.7s ;
+  -ms-transition: all 0.7s ;
+  -o-transition: all 0.7s ;
+}
+
+.contentInfo:hover {
+  background-color: rgba(139, 139, 119, 0.727);
+  box-shadow: 5px 14px 28px rgba(0,0,0,0.8);
+}
+.button-add{
+  width: 75px;
+  height: 75px;
+  border-radius: 38px;
+  font-size: 60px;
+  font-weight: 800;
+  margin-top: 25px;
+  font-family: 'Varela Round', sans-serif;
+  border: none;
+  margin-left: 50%;
+  color: white;
+  box-sizing: border-box;
+  background-color: #9a75f0;
+  transition: background-color .8s; 
+}
+.button-add:hover{
+  cursor: pointer;
+  background-color: #7243e1;;
+}
+.deletebtn {
+  border-radius: 4px;
+  color: white; 
+  background-color: #bb7472; 
+  border-style: none;
+}
+
+.submitbtn {
+  border-radius: 4px;
+  border-style: none;
+  margin-right: 10px;
+  color: white;
+  background-color: #6eb9eb;
 }

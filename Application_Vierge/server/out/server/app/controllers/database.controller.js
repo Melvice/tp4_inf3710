@@ -30,15 +30,16 @@ let DatabaseController = class DatabaseController {
             this.databaseService
                 .getAllPlans()
                 .then((result) => {
-                const planRepas = result.rows.map((plan) => ({
-                    numéroplan: plan.numéroplan,
-                    catégorie: plan.catégorie,
-                    fréquence: plan.fréquence,
+                const plans = result.rows.filter((plan) => ({
+                    numeroplan: plan.numeroplan,
+                    categorie: plan.categorie,
+                    frequence: plan.frequence,
                     nbrpersonnes: plan.nbrpersonnes,
                     nbrcalories: plan.nbrcalories,
                     prix: plan.prix,
                 }));
-                res.json(planRepas);
+                //console.log(plans);
+                res.json(plans);
             })
                 .catch((e) => {
                 console.error(e.stack);
@@ -46,14 +47,14 @@ let DatabaseController = class DatabaseController {
         });
         // ==== get plan repas with numeroPlan
         router.get("/planrepas/numeroPlan", (req, res, _) => {
-            let numeroPlan = parseInt(req.params.numéroplan) ? parseInt(req.params.numéroplan) : 0;
+            let numeroPlan = parseInt(req.params.numeroplan) ? parseInt(req.params.numeroplan) : 0;
             this.databaseService
                 .getPlanRepasByNos(numeroPlan)
                 .then((result) => {
                 const planRepasNames = result.rows.map((planRepas) => ({
-                    numéroplan: planRepas.numéroplan,
-                    catégorie: planRepas.catégorie,
-                    fréquence: planRepas.fréquence,
+                    numeroplan: planRepas.numeroplan,
+                    categorie: planRepas.categorie,
+                    frequence: planRepas.frequence,
                     nbrpersonnes: planRepas.nbrpersonnes,
                     nbrcalories: planRepas.nbrcalories,
                     prix: planRepas.prix
@@ -67,9 +68,9 @@ let DatabaseController = class DatabaseController {
         // ====== ADD PlanRepas ==============
         router.post("/planrepas/ajouter", (req, res, _) => {
             const planRepas = {
-                numéroplan: req.body.numéroplan,
-                catégorie: req.body.catégorie,
-                fréquence: req.body.fréquence,
+                numeroplan: req.body.numeroplan,
+                categorie: req.body.categorie,
+                frequence: req.body.frequence,
                 nbrpersonnes: req.body.nbrpersonnes,
                 nbrcalories: req.body.nbrcalories,
                 prix: req.body.prix
@@ -85,8 +86,8 @@ let DatabaseController = class DatabaseController {
             });
         });
         //====== delete a plan from the database
-        router.delete("/planrepas/delete/:numéroplan", (req, res, _) => {
-            const numeroPlan = req.params.numéroplan;
+        router.delete("/planrepas/delete/:numeroplan", (req, res, _) => {
+            const numeroPlan = parseInt(req.params.numeroplan);
             this.databaseService
                 .deletePlanRepas(numeroPlan)
                 .then((result) => {
@@ -99,9 +100,9 @@ let DatabaseController = class DatabaseController {
         //=== update planRepas =======
         router.put("/planrepas/update", (req, res, _) => {
             const planRepas = {
-                numéroplan: req.body.numéroplan ? req.body.numéroplan : null,
-                catégorie: req.body.catégorie ? req.body.catégorie : "",
-                fréquence: req.body.fréquence ? req.body.fréquence : null,
+                numeroplan: req.body.numeroplan ? req.body.numeroplan : null,
+                categorie: req.body.categorie ? req.body.categorie : "",
+                frequence: req.body.frequence ? req.body.frequence : null,
                 nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes : null,
                 nbrcalories: req.body.nbrcalories ? req.body.nbrcalories : null,
                 prix: req.body.prix ? req.body.prix : null

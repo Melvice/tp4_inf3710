@@ -35,7 +35,7 @@ let DatabaseService = class DatabaseService {
     getAllPlans() {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const res = yield client.query(`SELECT * FROM kitRepas.planRepas;`);
+            const res = yield client.query(`SELECT * FROM kitRepas.PlanRepas;`);
             client.release();
             return res;
         });
@@ -43,18 +43,18 @@ let DatabaseService = class DatabaseService {
     createPlanRepas(PlanRepas) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            if (!PlanRepas.numéroplan ||
-                !PlanRepas.catégorie ||
-                !PlanRepas.fréquence ||
+            if (!PlanRepas.numeroplan ||
+                !PlanRepas.categorie ||
+                !PlanRepas.frequence ||
                 !PlanRepas.nbrpersonnes ||
                 !PlanRepas.nbrcalories ||
                 !PlanRepas.prix) {
                 throw new Error("Invalid create planRepas values");
             }
             const values = [
-                PlanRepas.numéroplan,
-                PlanRepas.catégorie,
-                PlanRepas.fréquence,
+                PlanRepas.numeroplan,
+                PlanRepas.categorie,
+                PlanRepas.frequence,
                 PlanRepas.nbrpersonnes,
                 PlanRepas.nbrcalories,
                 PlanRepas.prix
@@ -98,7 +98,7 @@ let DatabaseService = class DatabaseService {
     getPlanRepasByNos(numeroPlan) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const res = yield client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numéroplan ='${numeroPlan} '`);
+            const res = yield client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
             client.release();
             return res;
         });
@@ -108,35 +108,35 @@ let DatabaseService = class DatabaseService {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
             let toUpdateValues = [];
-            if (PlanRepas.numéroplan >= 0)
-                toUpdateValues.push(`numéroPlan = '${PlanRepas.numéroplan}'`);
-            if (PlanRepas.catégorie.length > 0)
-                toUpdateValues.push(`catégorie = '${PlanRepas.catégorie}'`);
-            if (PlanRepas.fréquence >= 0)
-                toUpdateValues.push(`fréquence = '${PlanRepas.fréquence}'`);
+            if (PlanRepas.numeroplan >= 0)
+                toUpdateValues.push(`numeroPlan = '${PlanRepas.numeroplan}'`);
+            if (PlanRepas.categorie.length > 0)
+                toUpdateValues.push(`categorie = '${PlanRepas.categorie}'`);
+            if (PlanRepas.frequence >= 0)
+                toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
             if (PlanRepas.nbrpersonnes >= 0)
-                toUpdateValues.push(`nbrpersonnes = '${PlanRepas.nbrpersonnes}'`);
+                toUpdateValues.push(`nbrPersonnes = '${PlanRepas.nbrpersonnes}'`);
             if (PlanRepas.nbrcalories >= 0)
-                toUpdateValues.push(`nbrcalories = '${PlanRepas.nbrcalories}'`);
+                toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
             if (PlanRepas.prix >= 0)
                 toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
-            if (!PlanRepas.numéroplan ||
-                PlanRepas.numéroplan == null ||
+            if (!PlanRepas.numeroplan ||
+                PlanRepas.numeroplan == null ||
                 toUpdateValues.length === 0) {
                 throw new Error("Invalid PlanRepas update query");
             }
-            const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(", ")} WHERE numéroplan = '${PlanRepas.numéroplan}';`;
+            const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(", ")} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
             const res = yield client.query(query);
             client.release();
             return res;
         });
     }
-    deletePlanRepas(numéroPlan) {
+    deletePlanRepas(numeroPlan) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (numéroPlan === null)
+            if (numeroPlan === null)
                 throw new Error("Invalid delete query");
             const client = yield this.pool.connect();
-            const query = `DELETE FROM kitRepas.PlanRepas WHERE numéroplan = '${numéroPlan}';`;
+            const query = `DELETE FROM kitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
             const res = yield client.query(query);
             client.release();
             return res;
