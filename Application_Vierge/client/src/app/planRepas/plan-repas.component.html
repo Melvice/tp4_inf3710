@@ -1,9 +1,3 @@
-
-
-
-
-
-
 <div class="container">
 
   <h1>Nos plans repas</h1>
@@ -28,12 +22,13 @@
         <td class="contentCell">{{ plan.nbrcalories }}</td>
         <td class="contentCell">{{ plan.prix }}</td>
         <td class="contentCell">
-          <button type="button" class="submitbtn" (click)="updateHotel(i)"><i class="fa fa-edit"></i></button>
-          <button type="button" class="deletebtn" (click)="deleteHotel(hotel.hotelnb)"><i class="fa fa-trash-o"></i></button>
+          <button type="button" class="submitbtn" (click)="updatePlanRepas(i)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="deletebtn" (click)="deletePlanRepas(plan.numeroplan)"><i class="fa fa-trash-o"></i></button>
         </td>
       </tr>
     </tbody>
   </table>
   <button type="button" class="button-add" >+</button>
-
+ <!-- Todo implémenter les modales pour les fonctions options add, delete, et update
+    et faire les fonctions dans plan-repas.component.ts-->
 </div>

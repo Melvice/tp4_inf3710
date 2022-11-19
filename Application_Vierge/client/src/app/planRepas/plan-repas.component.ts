@@ -45,7 +45,7 @@ export class PlanRepasComponent {
     this.newHotelCity.nativeElement.innerText = "";
   }*/
 
-  public deleteHotel(numeroPlan: number) {
+  public deletePlanRepas(numeroPlan: number) {
     this.communicationService.deletePlanRepas(numeroPlan).subscribe((res: any) => {
     //  this.refresh();
     });
