@@ -8,6 +8,6 @@ Pour réaliser se travaille, nous nous sommes inspiré du tutoriel qui a été m
 
 # Démarche pour lancer l'application
 
-Premièrement, copié l'adresse Url du repos git et faite la commande "git clone <Url ici!>" dans l'invite de commande d'un dossier de votre repos local.
+Premièrement, copié l'adresse Url du repos git et faite la commande `git clone <Url ici!>` dans l'invite de commande d'un dossier de votre repos local.
 Ensuite, ouvrez le fichier sur l'éditeur VsCode.
-Par la suite, ouvrir le terminal et excécuté la commande " npm i " dans le repertoire client pour installer les dépendances, puis "npm start" dans le server, puis le client pour lancer l'application web.
+Par la suite, ouvrir le terminal et excécuté la commande  `npm i` dans le repertoire client pour installer les dépendances, puis `npm start` dans le server, puis le client pour lancer l'application web.
