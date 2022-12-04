@@ -12,7 +12,6 @@ export class DatabaseController {
     @inject(Types.DatabaseService) private readonly databaseService: DatabaseService
   ) {}
 
-
   public get router(): Router {
     const router: Router = Router();
 
@@ -66,13 +65,13 @@ export class DatabaseController {
     "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
-        numeroplan:   req.body.numeroplan,
+        numeroplan:   parseInt(req.body.numeroplan),
         categorie:    req.body.categorie,
         frequence:    req.body.frequence,
-        nbrpersonnes: req.body.nbrpersonnes,
-        nbrcalories:  req.body.nbrcalories,
-        numerofournisseur: req.body.numerofournisseur,
-        prix:         req.body.prix
+        nbrpersonnes: parseInt(req.body.nbrpersonnes),
+        nbrcalories:  parseInt(req.body.nbrcalories),
+        numerofournisseur: parseInt(req.body.numerofournisseur),
+        prix:         parseFloat(req.body.prix)
       };
 
       this.databaseService
@@ -108,13 +107,13 @@ export class DatabaseController {
     "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
-        numeroplan:   req.body.numeroplan ? req.body.numeroplan : null,
-        categorie:    req.body.categorie ? req.body.categorie: "",
-        frequence:    req.body.frequence ? req.body.frequence: null,
-        nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes: null,
-        nbrcalories:  req.body.nbrcalories ? req.body.nbrcalories: null,
-        numerofournisseur: req.body.numerofournisseur ? req.body.numerofournisseur: 0,
-        prix:         req.body.prix ? req.body.prix : null
+        numeroplan:  parseInt(req.body.numeroplan),
+        categorie:    req.body.categorie,
+        frequence:    req.body.frequence,
+        nbrpersonnes: parseInt(req.body.nbrpersonnes),
+        nbrcalories:  parseInt(req.body.nbrcalories),
+        numerofournisseur: parseInt(req.body.numerofournisseur),
+        prix:        parseFloat(req.body.prix)
       };
 
       this.databaseService

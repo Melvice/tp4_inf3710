@@ -84,7 +84,8 @@ export class DatabaseService {
     client.release();
     return res;
   }
-
+  
+  // delete plan repas
   public async deletePlanRepas(numeroPlan: number): Promise<pg.QueryResult> {
     if (numeroPlan === null) throw new Error("Invalid delete query");
     const client = await this.pool.connect();
