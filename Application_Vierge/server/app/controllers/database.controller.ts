@@ -12,13 +12,11 @@ export class DatabaseController {
     @inject(Types.DatabaseService) private readonly databaseService: DatabaseService
   ) {}
 
-  // suivre les commentaires pour que ce soit restful
 
   public get router(): Router {
     const router: Router = Router();
 
    // ======= Plan Repas ROUTES =======
-
   router.get("/planrepas", (req: Request, res: Response, _: NextFunction) => {
         this.databaseService
         .getAllPlans()
@@ -31,7 +29,6 @@ export class DatabaseController {
             nbrcalories: plan.nbrcalories,
             prix: plan.prix,
           }));
-          //console.log(plans);
           res.json(plans);
         })
         .catch((e: Error) => {
@@ -40,7 +37,6 @@ export class DatabaseController {
     });
 
   // ==== get plan repas with numeroPlan
-
   router.get(
     "/planrepas/numeroPlan",
     (req: Request, res: Response, _: NextFunction) => {
@@ -59,7 +55,6 @@ export class DatabaseController {
           }));
           res.json(plan);
         })
-
         .catch((e: Error) => {
           console.error(e.stack);
         });
@@ -67,7 +62,6 @@ export class DatabaseController {
   );
 
   // ====== ADD PlanRepas ==============
-
   router.post(
     "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
@@ -94,7 +88,6 @@ export class DatabaseController {
   );
 
  //====== delete a plan from the database
-
   router.delete(
     "/planrepas/:numeroplan",
     (req: Request, res: Response, _: NextFunction) => {
@@ -111,12 +104,10 @@ export class DatabaseController {
   );
 
   //=== update planRepas =======
-  //changer update par le numero du plan
   router.put(
     "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
-       
         numeroplan:   req.body.numeroplan ? req.body.numeroplan : null,
         categorie:    req.body.categorie ? req.body.categorie: "",
         frequence:    req.body.frequence ? req.body.frequence: null,

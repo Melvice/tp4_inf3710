@@ -25,7 +25,6 @@ export class DatabaseService {
     return res;
   }
 
-
   public async createPlanRepas(planRepas:PlanRepas): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
     if (
@@ -38,17 +37,6 @@ export class DatabaseService {
       {
         throw new Error("Invalid create planRepas values");
       }
-
-    /*const values: (string | number)[] = 
-    [
-      PlanRepas.numeroplan, 
-      PlanRepas.categorie, 
-      PlanRepas.frequence, 
-      PlanRepas.nbrpersonnes, 
-      PlanRepas.nbrcalories, 
-      PlanRepas.numerofournisseur,
-      PlanRepas.prix
-    ];*/
     const queryText: string = `INSERT INTO livraisonKitRepas.PlanRepas 
     VALUES(${planRepas.numeroplan}, '${planRepas.categorie}', 
     '${planRepas.frequence}', ${planRepas.nbrpersonnes}, 
@@ -59,36 +47,7 @@ export class DatabaseService {
     return res;
   }
 
-  // get plan repas that matches certain caracteristics
- /* public async filterPlanrepas(
-    numéroplan:   number,
-    catégorie:    string,
-    fréquence:    number,
-    nbrpersonnes: number,
-    nbrcalories:  number,
-    prix:         number
-  ): Promise<pg.QueryResult> {
-    const client = await this.pool.connect();
-
-    const searchTerms: (string|number)[] = [];
-    if (numéroplan >= 0) searchTerms.push(`numéroPlan = '${numéroplan}'`);
-    if (catégorie.length > 0) searchTerms.push(`catégorie = '${catégorie}'`);
-    if (fréquence >= 0) searchTerms.push(`fréquence = '${fréquence}'`);
-    if (nbrpersonnes >= 0) searchTerms.push(`nbrpersonnes = '${nbrpersonnes}'`);
-    if (nbrcalories >= 0) searchTerms.push(`nbrcalories = '${nbrcalories}'`);
-    if (prix >= 0) searchTerms.push(`prix = '${prix}'`);
-
-    let queryText = "SELECT * FROM KitRepas.PlanRepas";
-    if (searchTerms.length > 0)
-      queryText += " WHERE " + searchTerms.join(" AND ");
-    queryText += ";";
-
-    const res = await client.query(queryText);
-    client.release();
-    return res;
-  }
-*/
-  // get planRepas categorie and numbers so so that the user can only select an existing hotel
+  // get planRepas by numeroPlan
   public async getPlanRepasByNos(numeroPlan:number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
     const res = await client.query(`SELECT *FROM livraisonKitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
@@ -99,17 +58,15 @@ export class DatabaseService {
   // modify plan repas
   public async updatePlanRepas(PlanRepas: PlanRepas): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-
     let toUpdateValues: any[] = [];
 
     if (PlanRepas.numeroplan >= 0) toUpdateValues.push(`numeroPlan = '${PlanRepas.numeroplan}'`);
     if (PlanRepas.categorie.length > 0) toUpdateValues.push(`categorie = '${PlanRepas.categorie}'`);
     if (PlanRepas.frequence.length > 0) toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
     if (PlanRepas.nbrpersonnes >= 0) toUpdateValues.push(`nbrPersonnes = '${PlanRepas.nbrpersonnes}'`);
-    if (PlanRepas.nbrcalories >= 0) toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
     if (PlanRepas.numerofournisseur >= 0) toUpdateValues.push(`numerofournisseur = '${PlanRepas.numerofournisseur}'`);
+    if (PlanRepas.nbrcalories >= 0) toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
     if (PlanRepas.prix >= 0) toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
-
     if (
       !PlanRepas.numeroplan ||
       PlanRepas.numeroplan == null||
@@ -122,6 +79,7 @@ export class DatabaseService {
     const query = `UPDATE livraisonKitRepas.PlanRepas SET ${toUpdateValues.join(
       ", "
     )} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
+    console.log(query);
     const res = await client.query(query);
     client.release();
     return res;
@@ -129,9 +87,9 @@ export class DatabaseService {
 
   public async deletePlanRepas(numeroPlan: number): Promise<pg.QueryResult> {
     if (numeroPlan === null) throw new Error("Invalid delete query");
-
     const client = await this.pool.connect();
     const query = `DELETE FROM livraisonKitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
+    console.log(query);
     const res = await client.query(query);
     client.release();
     return res;

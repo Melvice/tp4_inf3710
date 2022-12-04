@@ -23,7 +23,6 @@ let DatabaseController = class DatabaseController {
     databaseService) {
         this.databaseService = databaseService;
     }
-    // suivre les commentaires pour que ce soit restful
     get router() {
         const router = (0, express_1.Router)();
         // ======= Plan Repas ROUTES =======
@@ -39,7 +38,6 @@ let DatabaseController = class DatabaseController {
                     nbrcalories: plan.nbrcalories,
                     prix: plan.prix,
                 }));
-                //console.log(plans);
                 res.json(plans);
             })
                 .catch((e) => {
@@ -101,7 +99,6 @@ let DatabaseController = class DatabaseController {
             });
         });
         //=== update planRepas =======
-        //changer update par le numero du plan
         router.put("/planrepas", (req, res, _) => {
             const planRepas = {
                 numeroplan: req.body.numeroplan ? req.body.numeroplan : null,

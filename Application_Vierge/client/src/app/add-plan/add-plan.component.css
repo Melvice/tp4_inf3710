@@ -72,3 +72,17 @@ h1 {
   line-height: 1.5;
 }
 
+.ajouter {
+  background: rgb(28, 146, 83);
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.ajouter:hover {
+  background: rgb(28, 146, 83);
+  opacity: 0.8;
+}
+
+.retourner:hover {
+  opacity: 0.8;
+}

@@ -19,9 +19,8 @@ export class AddPlanComponent implements OnInit {
   nombrePersonnes = 0;
   frequencePlan = "";
   numerofournisseur = 0;
-  categories: string[] = ['Pescétarien', 'Famille',
-  'Végétarien'];
-
+  categories : string[] = ['Pescétarien', 'Famille','Végétarien'];
+  frequence  : string[] = ['Quotidien', 'Hebdomadaire','Mensuel'];
 
   /**
   * Note : ICI on set les valeurs par defauts des fournisseurs
@@ -29,12 +28,7 @@ export class AddPlanComponent implements OnInit {
    pour ainsi récupérer les numéros des fournisseurs
   */
   
-  fournisseurs:number[] = [
-    65165,
-    68454,
-    16456
-  ]
-  public duplicateError: boolean = false;
+  fournisseurs:number[] = [ 65165,68454,16456 ];
   planRepas: PlanRepas[];
 
   constructor(public dialog:MatDialog, private communicationService : CommunicationService) { }
@@ -56,14 +50,13 @@ export class AddPlanComponent implements OnInit {
     this.dialog.open(messageDialogComponent, {
       data: [msg,type],
       minWidth: '250px',
-      panelClass: 'success'
     });
   }
+  
   public displayError(msg: string, type: string) {
     this.dialog.open(messageDialogComponent, {
       data: [msg,type],
       minWidth: '250px',
-      panelClass: 'error'
     });
   }
 
@@ -122,7 +115,7 @@ export class AddPlanComponent implements OnInit {
   }
 
   public validateNombrePersonnes() : boolean{
-    if(this.nombrePersonnes == 0 || isNaN(this.nombreCalories)){
+    if(this.nombrePersonnes == 0 || isNaN(this.nombrePersonnes)){
       this.displayError("Le nombre de personnes ne peut pas être 0 et doit etre un entier", "error");
       return false;
     }
