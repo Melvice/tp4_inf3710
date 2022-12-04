@@ -1,7 +1,6 @@
 import { Component} from '@angular/core';
 import {CommunicationService} from '../services/communication.service'
 import { PlanRepas } from '../../../../common/tables/PlanRepas';
-import { AddPlanComponent } from '../add-plan/add-plan.component';
 import { MatDialog} from '@angular/material/dialog';
 import { ModifyPlanComponent } from '../modify-plan/modify-plan.component';
 import { DeletePlanComponent } from '../delete-plan/delete-plan.component';
@@ -28,10 +27,6 @@ export class PlanRepasComponent {
         return plan1.numeroplan - plan2.numeroplan;
       });
     });
-  }
-
-  openAddDialog(){
-    this.dialog.open(AddPlanComponent);
   }
 
   UpdateDialog(planRepas: PlanRepas) {

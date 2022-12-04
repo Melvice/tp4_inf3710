@@ -88,7 +88,6 @@ export class ModifyPlanComponent implements OnInit {
 
   public updatePlanRepas(): void{
     if(this.valideInput()){
-    console.log(this.newPlan);
     this.communicationService.updatePlanRepas(this.newPlan).subscribe((res: number) =>
       {
         if (res < 0) this.displayError("La modification du plan a échouée, il est possible qu'une des valeurs entrées soit invalides", "error");

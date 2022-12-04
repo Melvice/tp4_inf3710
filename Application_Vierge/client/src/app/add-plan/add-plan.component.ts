@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
   templateUrl: './add-plan.component.html',
   styleUrls: ['./add-plan.component.css']
 })
+
 export class AddPlanComponent implements OnInit {
   firstFormGroup: FormGroup;
   numeroPlan = 0;
@@ -27,7 +28,7 @@ export class AddPlanComponent implements OnInit {
    parce qu'en soit, le tp ne nous oblige pas à implémenter une table pour les fournisseurs
    pour ainsi récupérer les numéros des fournisseurs
   */
-  
+
   fournisseurs:number[] = [ 65165,68454,16456 ];
   planRepas: PlanRepas[];
 
