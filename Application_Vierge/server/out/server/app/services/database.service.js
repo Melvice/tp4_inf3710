@@ -35,32 +35,38 @@ let DatabaseService = class DatabaseService {
     getAllPlans() {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const res = yield client.query(`SELECT * FROM kitRepas.PlanRepas;`);
+            const res = yield client.query(`SELECT * FROM livraisonKitRepas.PlanRepas;`);
             client.release();
             return res;
         });
     }
-    createPlanRepas(PlanRepas) {
+    createPlanRepas(planRepas) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            if (!PlanRepas.numeroplan ||
-                !PlanRepas.categorie ||
-                !PlanRepas.frequence ||
-                !PlanRepas.nbrpersonnes ||
-                !PlanRepas.nbrcalories ||
-                !PlanRepas.prix) {
+            if (!planRepas.numeroplan.toString().length ||
+                !planRepas.categorie.length ||
+                !planRepas.frequence.length ||
+                !planRepas.nbrcalories.toString().length || planRepas.nbrcalories < 1 ||
+                !planRepas.numerofournisseur.toString().length ||
+                !planRepas.prix.toString().length || planRepas.prix <= 0) {
                 throw new Error("Invalid create planRepas values");
             }
-            const values = [
-                PlanRepas.numeroplan,
-                PlanRepas.categorie,
-                PlanRepas.frequence,
-                PlanRepas.nbrpersonnes,
-                PlanRepas.nbrcalories,
-                PlanRepas.prix
-            ];
-            const queryText = `INSERT INTO KitRepas.PlanRepas VALUES($1, $2, $3, $4, $5, $6);`;
-            const res = yield client.query(queryText, values);
+            /*const values: (string | number)[] =
+            [
+              PlanRepas.numeroplan,
+              PlanRepas.categorie,
+              PlanRepas.frequence,
+              PlanRepas.nbrpersonnes,
+              PlanRepas.nbrcalories,
+              PlanRepas.numerofournisseur,
+              PlanRepas.prix
+            ];*/
+            const queryText = `INSERT INTO livraisonKitRepas.PlanRepas 
+    VALUES(${planRepas.numeroplan}, '${planRepas.categorie}', 
+    '${planRepas.frequence}', ${planRepas.nbrpersonnes}, 
+    ${planRepas.numerofournisseur}, ${planRepas.nbrcalories},  ${planRepas.prix})`;
+            console.log(queryText);
+            const res = yield client.query(queryText);
             client.release();
             return res;
         });
@@ -98,7 +104,7 @@ let DatabaseService = class DatabaseService {
     getPlanRepasByNos(numeroPlan) {
         return __awaiter(this, void 0, void 0, function* () {
             const client = yield this.pool.connect();
-            const res = yield client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
+            const res = yield client.query(`SELECT *FROM livraisonKitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
             client.release();
             return res;
         });
@@ -112,12 +118,14 @@ let DatabaseService = class DatabaseService {
                 toUpdateValues.push(`numeroPlan = '${PlanRepas.numeroplan}'`);
             if (PlanRepas.categorie.length > 0)
                 toUpdateValues.push(`categorie = '${PlanRepas.categorie}'`);
-            if (PlanRepas.frequence >= 0)
+            if (PlanRepas.frequence.length > 0)
                 toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
             if (PlanRepas.nbrpersonnes >= 0)
                 toUpdateValues.push(`nbrPersonnes = '${PlanRepas.nbrpersonnes}'`);
             if (PlanRepas.nbrcalories >= 0)
                 toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
+            if (PlanRepas.numerofournisseur >= 0)
+                toUpdateValues.push(`numerofournisseur = '${PlanRepas.numerofournisseur}'`);
             if (PlanRepas.prix >= 0)
                 toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
             if (!PlanRepas.numeroplan ||
@@ -125,7 +133,7 @@ let DatabaseService = class DatabaseService {
                 toUpdateValues.length === 0) {
                 throw new Error("Invalid PlanRepas update query");
             }
-            const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(", ")} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
+            const query = `UPDATE livraisonKitRepas.PlanRepas SET ${toUpdateValues.join(", ")} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
             const res = yield client.query(query);
             client.release();
             return res;
@@ -136,7 +144,7 @@ let DatabaseService = class DatabaseService {
             if (numeroPlan === null)
                 throw new Error("Invalid delete query");
             const client = yield this.pool.connect();
-            const query = `DELETE FROM kitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
+            const query = `DELETE FROM livraisonKitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
             const res = yield client.query(query);
             client.release();
             return res;

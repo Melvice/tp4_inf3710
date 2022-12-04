@@ -23,6 +23,7 @@ let DatabaseController = class DatabaseController {
     databaseService) {
         this.databaseService = databaseService;
     }
+    // suivre les commentaires pour que ce soit restful
     get router() {
         const router = (0, express_1.Router)();
         // ======= Plan Repas ROUTES =======
@@ -51,28 +52,30 @@ let DatabaseController = class DatabaseController {
             this.databaseService
                 .getPlanRepasByNos(numeroPlan)
                 .then((result) => {
-                const planRepasNames = result.rows.map((planRepas) => ({
+                const plan = result.rows.map((planRepas) => ({
                     numeroplan: planRepas.numeroplan,
                     categorie: planRepas.categorie,
                     frequence: planRepas.frequence,
                     nbrpersonnes: planRepas.nbrpersonnes,
                     nbrcalories: planRepas.nbrcalories,
+                    numerofournisseur: planRepas.numerofournisseur,
                     prix: planRepas.prix
                 }));
-                res.json(planRepasNames);
+                res.json(plan);
             })
                 .catch((e) => {
                 console.error(e.stack);
             });
         });
         // ====== ADD PlanRepas ==============
-        router.post("/planrepas/ajouter", (req, res, _) => {
+        router.post("/planrepas", (req, res, _) => {
             const planRepas = {
                 numeroplan: req.body.numeroplan,
                 categorie: req.body.categorie,
                 frequence: req.body.frequence,
                 nbrpersonnes: req.body.nbrpersonnes,
                 nbrcalories: req.body.nbrcalories,
+                numerofournisseur: req.body.numerofournisseur,
                 prix: req.body.prix
             };
             this.databaseService
@@ -86,7 +89,7 @@ let DatabaseController = class DatabaseController {
             });
         });
         //====== delete a plan from the database
-        router.delete("/planrepas/delete/:numeroplan", (req, res, _) => {
+        router.delete("/planrepas/:numeroplan", (req, res, _) => {
             const numeroPlan = parseInt(req.params.numeroplan);
             this.databaseService
                 .deletePlanRepas(numeroPlan)
@@ -98,13 +101,15 @@ let DatabaseController = class DatabaseController {
             });
         });
         //=== update planRepas =======
-        router.put("/planrepas/update", (req, res, _) => {
+        //changer update par le numero du plan
+        router.put("/planrepas", (req, res, _) => {
             const planRepas = {
                 numeroplan: req.body.numeroplan ? req.body.numeroplan : null,
                 categorie: req.body.categorie ? req.body.categorie : "",
                 frequence: req.body.frequence ? req.body.frequence : null,
                 nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes : null,
                 nbrcalories: req.body.nbrcalories ? req.body.nbrcalories : null,
+                numerofournisseur: req.body.numerofournisseur ? req.body.numerofournisseur : 0,
                 prix: req.body.prix ? req.body.prix : null
             };
             this.databaseService

@@ -29,21 +29,21 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<PlanRepas[]>("getAllPlanRepas")));
   }
 
-  public AddPlanRepas(planRepas: PlanRepas): Observable<number> {
+  public addPlanRepas(planRepas: PlanRepas): Observable<number> {
     return this.http
-      .post<number>(this.BASE_URL + "/planrepas/ajouter", planRepas)
-      .pipe(catchError(this.handleError<number>("AddPlanRepas")));
+      .post<number>(this.BASE_URL + "/planrepas", planRepas)
+      .pipe(catchError(this.handleError<number>("addPlanRepas")));
   }
 
   public updatePlanRepas(planRepas: PlanRepas): Observable<number> {
     return this.http
-      .put<number>(this.BASE_URL + "/planrepas/update", planRepas)
+      .put<number>(this.BASE_URL + "/planrepas", planRepas)
       .pipe(catchError(this.handleError<number>("updatePlanRepas")));
   }
 
   public deletePlanRepas(numeroPlan: number): Observable<number> {
     return this.http
-      .post<number>(this.BASE_URL + `/planrepas/delete/${numeroPlan}`, {})
+      .delete<number>(this.BASE_URL + `/planrepas/${numeroPlan}`, {})
       .pipe(catchError(this.handleError<number>("deletePlanRepas")));
   }
 
@@ -53,8 +53,6 @@ export class CommunicationService {
       .pipe(catchError(this.handleError<PlanRepas[]>("getPlanRepasByNumber")));
   }
 
-
-  // À DÉCOMMENTER ET À UTILISER LORSQUE VOTRE COMMUNICATION EST IMPLÉMENTÉE
    private handleError<T>(
      request: string,
      result?: T

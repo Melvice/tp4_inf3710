@@ -1,0 +1,59 @@
+<div class="page-container">
+  <h1>Ajouter un Plan repas</h1>
+  <div class="form-container">
+    <div class="form-group">
+      <label class="form-label">Numéro du plan</label>
+      <mat-form-field appearance="fill">
+          <mat-label>numéro du plan</mat-label>
+          <input type="number" min= 0 matInput [(ngModel)]="numeroPlan" placeholder="Ex. 1" required >
+      </mat-form-field>
+    </div>
+      <div class="form-group">
+      <label class="form-label">Catégorie</label>
+      <mat-form-field appearance="fill">
+        <mat-select matInput [(ngModel)]="categoriePlan" placeholder="Ex. 1 famille" required>
+          <mat-option *ngFor="let elem of categories" [value]="elem">{{elem}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Fréquence</label>  
+      <mat-form-field appearance="fill">
+          <mat-label [style.margin-bottom]="2">fréquence du plan</mat-label>
+          <input matInput  [(ngModel)]="frequencePlan" placeholder="Ex. hebdomadaire" required>
+      </mat-form-field>
+      </div>
+      <div class="form-group">
+      <label class="form-label">Nombre de personnes</label>
+      <mat-form-field appearance="fill">
+          <mat-label>nombre de personnes</mat-label>
+          <input type="number" min= 0 matInput [(ngModel)]="nombrePersonnes" placeholder="Ex. 5" required >
+      </mat-form-field>
+      </div>
+      <div class="form-group">
+         <label class="form-label">Nombre de calories</label>
+          <mat-form-field appearance="fill">    
+            <mat-label>nombre de calories</mat-label>
+            <input type="number" min= 0 matInput [(ngModel)]="nombreCalories" placeholder="Ex. 1000" required>
+          </mat-form-field>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Numéro du fournisseur</label>
+         <mat-form-field appearance="fill">
+          <mat-select matInput [(ngModel)]="numerofournisseur" placeholder="Ex. 16456" required>
+            <mat-option *ngFor="let elem of fournisseurs" [value]="elem">{{elem}}</mat-option>
+          </mat-select>   
+         </mat-form-field>
+     </div>
+    <div class="form-group">
+      <label class="form-label">Prix</label>
+      <mat-form-field appearance="fill">
+          <mat-label>prix du plan</mat-label>
+          <input type="number" min= 0 matInput  [(ngModel)]="prixPlan" placeholder="Ex. 120.00" required>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" type="submit" (click)="addPlanRepas()">Ajouter le plan repas</button>
+    <button mat-raised-button  color="primary" routerLink="/planrepas"> Retourner aux plans repas</button>
+  </div>
+</div>
+

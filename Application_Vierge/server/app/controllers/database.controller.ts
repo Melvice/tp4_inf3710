@@ -12,6 +12,7 @@ export class DatabaseController {
     @inject(Types.DatabaseService) private readonly databaseService: DatabaseService
   ) {}
 
+  // suivre les commentaires pour que ce soit restful
 
   public get router(): Router {
     const router: Router = Router();
@@ -47,15 +48,16 @@ export class DatabaseController {
       this.databaseService
         .getPlanRepasByNos(numeroPlan)
         .then((result: pg.QueryResult) => {
-          const planRepasNames = result.rows.map((planRepas: PlanRepas) => ({
+          const plan = result.rows.map((planRepas: PlanRepas) => ({
             numeroplan:   planRepas.numeroplan,
             categorie:    planRepas.categorie,
             frequence:    planRepas.frequence,
             nbrpersonnes: planRepas.nbrpersonnes,
             nbrcalories:  planRepas.nbrcalories,
+            numerofournisseur: planRepas.numerofournisseur,
             prix:         planRepas.prix
           }));
-          res.json(planRepasNames);
+          res.json(plan);
         })
 
         .catch((e: Error) => {
@@ -66,9 +68,8 @@ export class DatabaseController {
 
   // ====== ADD PlanRepas ==============
 
-  
   router.post(
-    "/planrepas/ajouter",
+    "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
         numeroplan:   req.body.numeroplan,
@@ -76,6 +77,7 @@ export class DatabaseController {
         frequence:    req.body.frequence,
         nbrpersonnes: req.body.nbrpersonnes,
         nbrcalories:  req.body.nbrcalories,
+        numerofournisseur: req.body.numerofournisseur,
         prix:         req.body.prix
       };
 
@@ -94,7 +96,7 @@ export class DatabaseController {
  //====== delete a plan from the database
 
   router.delete(
-    "/planrepas/delete/:numeroplan",
+    "/planrepas/:numeroplan",
     (req: Request, res: Response, _: NextFunction) => {
       const numeroPlan: number = parseInt(req.params.numeroplan);
       this.databaseService
@@ -109,8 +111,9 @@ export class DatabaseController {
   );
 
   //=== update planRepas =======
+  //changer update par le numero du plan
   router.put(
-    "/planrepas/update",
+    "/planrepas",
     (req: Request, res: Response, _: NextFunction) => {
       const planRepas: PlanRepas = {
        
@@ -119,6 +122,7 @@ export class DatabaseController {
         frequence:    req.body.frequence ? req.body.frequence: null,
         nbrpersonnes: req.body.nbrpersonnes ? req.body.nbrpersonnes: null,
         nbrcalories:  req.body.nbrcalories ? req.body.nbrcalories: null,
+        numerofournisseur: req.body.numerofournisseur ? req.body.numerofournisseur: 0,
         prix:         req.body.prix ? req.body.prix : null
       };
 

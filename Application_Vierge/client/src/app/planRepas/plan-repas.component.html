@@ -10,25 +10,25 @@
       <th class="headerCell">Fréquence</th>
       <th class="headerCell">Nombre de personnes</th>
       <th class="headerCell">Nombre de calories</th>
+      <th class="headerCell">Numéro du fournisseur</th>
       <th class="headerCell">Prix</th>
       <th class="actionCell">ACTION</th>
     </thead>
     <tbody class = "containerBody">
-      <tr class="contentInfo" *ngFor="let plan of planRepas; let i = index">
+      <tr class="contentInfo" *ngFor="let plan of planRepas">
         <td class="contentCell">{{ plan.numeroplan }}</td>
         <td class="contentCell">{{ plan.categorie }}</td>
         <td class="contentCell">{{ plan.frequence }}</td>
         <td class="contentCell">{{ plan.nbrpersonnes }}</td>
         <td class="contentCell">{{ plan.nbrcalories }}</td>
+        <td class="contentCell">{{ plan.numerofournisseur }}</td>
         <td class="contentCell">{{ plan.prix }}</td>
         <td class="contentCell">
-          <button type="button" class="submitbtn" (click)="updatePlanRepas(i)"><i class="fa fa-edit"></i></button>
-          <button type="button" class="deletebtn" (click)="deletePlanRepas(plan.numeroplan)"><i class="fa fa-trash-o"></i></button>
+        <button type="button" class="submitbtn" (click)="UpdateDialog(plan)"><i class="fa fa-edit"></i></button>
+        <button type="button" class="deletebtn" (click)="deleteDialog(plan)"><i class="fa fa-trash-o"></i></button>
         </td>
       </tr>
     </tbody>
   </table>
-  <button type="button" class="button-add" >+</button>
- <!-- Todo implémenter les modales pour les fonctions options add, delete, et update
-    et faire les fonctions dans plan-repas.component.ts-->
+<button type="button" class="button-add" routerLink="/ajouter">+</button>
 </div>

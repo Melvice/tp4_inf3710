@@ -20,38 +20,41 @@ export class DatabaseService {
 
   public async getAllPlans(): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT * FROM kitRepas.PlanRepas;`);
+    const res = await client.query(`SELECT * FROM livraisonKitRepas.PlanRepas;`);
     client.release();
     return res;
   }
 
 
-  public async createPlanRepas(PlanRepas:PlanRepas): Promise<pg.QueryResult> {
+  public async createPlanRepas(planRepas:PlanRepas): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-
     if (
-      !PlanRepas.numeroplan|| 
-      !PlanRepas.categorie || 
-      !PlanRepas.frequence|| 
-      !PlanRepas.nbrpersonnes|| 
-      !PlanRepas.nbrcalories|| 
-      !PlanRepas.prix)
+      !planRepas.numeroplan.toString().length || 
+      !planRepas.categorie.length || 
+      !planRepas.frequence.length ||
+      !planRepas.nbrcalories.toString().length || planRepas.nbrcalories < 1 ||
+      !planRepas.numerofournisseur.toString().length ||
+      !planRepas.prix.toString().length || planRepas.prix <= 0)
       {
         throw new Error("Invalid create planRepas values");
       }
 
-    const values: (string | number)[] = 
+    /*const values: (string | number)[] = 
     [
       PlanRepas.numeroplan, 
       PlanRepas.categorie, 
       PlanRepas.frequence, 
       PlanRepas.nbrpersonnes, 
       PlanRepas.nbrcalories, 
+      PlanRepas.numerofournisseur,
       PlanRepas.prix
-    ];
-    const queryText: string = `INSERT INTO KitRepas.PlanRepas VALUES($1, $2, $3, $4, $5, $6);`;
-
-    const res = await client.query(queryText, values);
+    ];*/
+    const queryText: string = `INSERT INTO livraisonKitRepas.PlanRepas 
+    VALUES(${planRepas.numeroplan}, '${planRepas.categorie}', 
+    '${planRepas.frequence}', ${planRepas.nbrpersonnes}, 
+    ${planRepas.numerofournisseur}, ${planRepas.nbrcalories},  ${planRepas.prix})`;
+    console.log(queryText);
+    const res = await client.query(queryText);
     client.release();
     return res;
   }
@@ -88,7 +91,7 @@ export class DatabaseService {
   // get planRepas categorie and numbers so so that the user can only select an existing hotel
   public async getPlanRepasByNos(numeroPlan:number): Promise<pg.QueryResult> {
     const client = await this.pool.connect();
-    const res = await client.query(`SELECT *FROM KitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
+    const res = await client.query(`SELECT *FROM livraisonKitRepas.PlanRepas WHERE numeroplan ='${numeroPlan} '`);
     client.release();
     return res;
   }
@@ -101,9 +104,10 @@ export class DatabaseService {
 
     if (PlanRepas.numeroplan >= 0) toUpdateValues.push(`numeroPlan = '${PlanRepas.numeroplan}'`);
     if (PlanRepas.categorie.length > 0) toUpdateValues.push(`categorie = '${PlanRepas.categorie}'`);
-    if (PlanRepas.frequence >= 0) toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
+    if (PlanRepas.frequence.length > 0) toUpdateValues.push(`frequence = '${PlanRepas.frequence}'`);
     if (PlanRepas.nbrpersonnes >= 0) toUpdateValues.push(`nbrPersonnes = '${PlanRepas.nbrpersonnes}'`);
     if (PlanRepas.nbrcalories >= 0) toUpdateValues.push(`nbrCalories = '${PlanRepas.nbrcalories}'`);
+    if (PlanRepas.numerofournisseur >= 0) toUpdateValues.push(`numerofournisseur = '${PlanRepas.numerofournisseur}'`);
     if (PlanRepas.prix >= 0) toUpdateValues.push(`prix = '${PlanRepas.prix}'`);
 
     if (
@@ -115,7 +119,7 @@ export class DatabaseService {
       throw new Error("Invalid PlanRepas update query");
     }
 
-    const query = `UPDATE KitRepas.PlanRepas SET ${toUpdateValues.join(
+    const query = `UPDATE livraisonKitRepas.PlanRepas SET ${toUpdateValues.join(
       ", "
     )} WHERE numeroplan = '${PlanRepas.numeroplan}';`;
     const res = await client.query(query);
@@ -127,7 +131,7 @@ export class DatabaseService {
     if (numeroPlan === null) throw new Error("Invalid delete query");
 
     const client = await this.pool.connect();
-    const query = `DELETE FROM kitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
+    const query = `DELETE FROM livraisonKitRepas.PlanRepas WHERE numeroplan = '${numeroPlan}';`;
     const res = await client.query(query);
     client.release();
     return res;
