@@ -1,5 +1,5 @@
 # tp4_inf3710
-application web angular
+Application web angular
 # Résumé
 Notre Application consiste en la gestion d'une "database" nommé Planrepas.
 Sur cette "database", nous pouvons faire des opérations d'ajout , de modifications et de suppressions de données via des requêtes Http, qui interagiront avec PgAdmin dans le but d'apporter les bonnes modifications à notre "database" locale.
