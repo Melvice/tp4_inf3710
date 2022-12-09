@@ -10,11 +10,11 @@ IN (SELECT numéroclient FROM Abonner WHERE numéroplan IN ( SELECT numéroplan 
 
 --4.2
 SELECT numéroplan FROM Planrepas  WHERE numérofournisseur 
-IN ( SELECT  numérofournisseur FROM Fournisseur WHERE numérofournisseur < >  ‘ QC Transport’ ) 
+IN ( SELECT  numérofournisseur FROM Fournisseur WHERE numérofournisseur < >  'QC Transport' ) 
 
 --4.3
 SELECT numéroplan FROM Famille WHERE numéroplan 
-IN ( SELECT numéroplan FROM PlanRepas Where catégorie = ‘cétogène’ )
+IN ( SELECT numéroplan FROM PlanRepas Where catégorie = 'cétogène' )
 
 --4.4
 SELECT COUNT(DISTINCT numérofournisseur) FROM Fournisseur WHERE nomfournisseur IS NULL;
@@ -41,12 +41,12 @@ p.numérofournisseur = f.numérofournisseur )
 --4.8
 SELECT numéroclient, nomclient,  prénomclient 
 FROM Client , Fournisseur   WHERE prénomclient 
-NOT LIKE ‘[aeuioAEUIO]%’ AND villeclient = adressefournisseur 
-AND nomfournisseur = ‘Benjamin’ ORDER by nomclient ASC
+NOT LIKE '[aeuioAEUIO]%' AND villeclient = adressefournisseur 
+AND nomfournisseur = 'Benjamin' ORDER by nomclient ASC
 
 --4.9
 SELECT paysingrédient , COUNT (numéroingredient) as nombreingredient 
-FROM Ingredient WHERE paysingrédient NOT LIKE  ‘%g__’  
+FROM Ingredient WHERE paysingrédient NOT LIKE  '%g__'  
 GROUP BY paysingrédient ORDER BY paysingrédient DESC;
 
 --4.10
