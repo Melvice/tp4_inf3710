@@ -19,6 +19,9 @@ export class PlanRepasComponent {
   public ngOnInit(): void {
     this.getAllPlanRepas();
   }
+  public test(): void{
+
+  }
 
   public getAllPlanRepas(): void {
     this.communicationService.getAllPlanRepas().subscribe((planRepas: PlanRepas[]) => {
